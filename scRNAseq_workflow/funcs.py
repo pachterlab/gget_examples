@@ -364,16 +364,6 @@ def volcano_plot(df_volcano, min_fold_change=2, alpha=0.05, figsize=(7, 7)):
     ax.set_axisbelow(True)
 
     fig.show()
-    
-def pretty_print(df, cols):
-    """
-    Function to wrap columns cols of 
-    a data frame df for easier reading.
-    """
-    for col in cols:
-        df.loc[:, col] = df[col].str.wrap(30)
-    
-    return display(HTML(df.to_html().replace("\\n","<br>")))
 
 def chr_locations(df_blat):
     fig, ax = plt.subplots(figsize=(10,5))
