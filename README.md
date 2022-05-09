@@ -1,220 +1,27 @@
 # gget_examples
 
-##gget ref
-### Use in combination with [kallisto | bustools](https://www.kallistobus.tools/kb_usage/kb_ref/) to build a reference
+This repository contains examples for [`gget`](https://github.com/pachterlab/gget).
 
-```bash
-kb ref -i INDEX -g T2G -f1 FASTA $(gget ref --ftp -w dna,gtf -s homo_sapiens)
-```
-&rarr; kb ref builds a reference using the latest DNA and GTF files of species **Homo sapiens** passed to it by gget ref
+`gget` is a free and open-source command-line tool and Python package that enables efficient querying of genomic databases. `gget`  consists of a collection of separate but interoperable modules, each designed to facilitate one type of database querying in a single line of code.  
 
-#### Show all available species
+`gget` currently consists of the following nine modules:
+- **gget ref**
+Fetch FTPs and metadata for reference genomes and annotations from [Ensembl](https://www.ensembl.org/) by species.
+- **gget search**
+Fetch genes and transcripts from [Ensembl](https://www.ensembl.org/) using free-form search terms.
+- **gget info**
+Fetch extensive gene and transcript metadata from [Ensembl](https://www.ensembl.org/), [UniProt](https://www.uniprot.org/), and [NCBI](https://www.ncbi.nlm.nih.gov/) using Ensembl IDs.
+- **gget seq**
+Fetch nucleotide or amino acid sequences of genes or transcripts from [Ensembl](https://www.ensembl.org/) or [UniProt](https://www.uniprot.org/), respectively.
+- **gget blast** 
+BLAST a nucleotide or amino acid sequence against any [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi) database.
+- **gget blat**  
+Find the genomic location of a nucleotide or amino acid sequence using [BLAT](https://genome.ucsc.edu/cgi-bin/hgBlat).
+- **gget muscle** 
+Align multiple nucleotide or amino acid sequences against each other using [Muscle5](https://www.drive5.com/muscle/).
+- **gget enrichr** 
+Perform an enrichment analysis on a list of genes using [Enrichr](https://maayanlab.cloud/Enrichr/).
+- **gget archs4**
+Find the most correlated genes or the tissue expression atlas of a gene of interest using [ARCHS4](https://maayanlab.cloud/archs4/).
 
-```python
-# Jupyter Lab / Google Colab:
-!gget ref --list
-
-# Terminal:
-$ gget ref --list
-```
-&rarr; Returns a list with all available species from the latest Ensembl release.
-
-#### Fetch GTF, DNA, and cDNA FTP links for a specific species
-
-```python
-# Jupyter Lab / Google Colab:
-ref("homo_sapiens")
-
-# Terminal:
-$ gget ref -s homo_sapiens
-```
-&rarr; Returns a json with the latest links to human GTF and FASTA files, their respective release dates and time, and the Ensembl release from which the links were fetched, in the format:
-```
-{
-            species: {
-                "transcriptome_cdna": {
-                    "ftp": cDNA FTP download URL,
-                    "ensembl_release": Ensembl release,
-                    "release_date": Day-Month-Year,
-                    "release_time": HH:MM,
-                    "bytes": cDNA FTP file size in bytes
-                },
-                "genome_dna": {
-                    "ftp": DNA FTP download URL,
-                    "ensembl_release": Ensembl release,
-                    "release_date": Day-Month-Year,
-                    "release_time": HH:MM,
-                    "bytes": DNA FTP file size in bytes
-                },
-                "annotation_gtf": {
-                    "ftp": GTF FTP download URL,
-                    "ensembl_release": Ensembl release,
-                    "release_date": Day-Month-Year,
-                    "release_time": HH:MM,
-                    "bytes": GTF FTP file size in bytes
-                }
-            }
-        }
-```
-
-#### Fetch GTF, DNA, and cDNA FTP links for a specific species from a specific Ensembl release
-For example, for Ensembl release 104:  
-
-
-```python
-# Jupyter Lab / Google Colab:
-ref("homo_sapiens", release=104)
-
-# Terminal
-$ gget ref -s homo_sapiens -r 104
-```
-&rarr; Returns a json with the human reference genome GTF, DNA, and cDNA links, and their respective release dates and time, from Ensembl release 104.
-
-#### Save the results
-
-```python
-# Jupyter Lab / Google Colab:
-ref("homo_sapiens", save=True)
-
-# Terminal 
-$ gget ref -s homo_sapiens -o path/to/directory/ref_results.json
-```
-&rarr; Saves the results in path/to/directory/ref_results.json.  
-For Jupyter Lab / Google Colab: Saves the results in a json file named ref_results.json in the current working directory.  
-  
-Note: To download the files linked to by the FTPs into the current directory, add flag `-d`.
-
-#### Fetch only certain types of links for a specific species 
-
-```python
-# Jupyter Lab / Google Colab:
-ref("homo_sapiens", which=["gtf", "dna"])
-
-
-# Terminal 
-$ gget ref -s homo_sapiens -w gtf,dna
-```
-&rarr; Returns a dictionary/json containing the latest human reference GTF and DNA files, in this order, and their respective release dates and time.    
-
-#### Fetch only certain types of links for a specific species and return only the links
-
-```python
-# Jupyter Lab / Google Colab:
-ref("homo_sapiens", which=["gtf", "dna"], ftp=True)
-
-# Terminal 
-$ gget ref -s homo_sapiens -w gtf,dna -ftp
-```
-&rarr; Returns only the links (wihtout additional information) to the latest human reference GTF and DNA files, in this order, in a space-separated list (terminal), or comma-separated list (Jupyter Lab / Google Colab).    
-For Jupyter Lab / Google Colab: Combining this command with `save=True`, will save the results in a text file named ref_results.txt in the current working directory.
-
-___
-##gget search
-
-#### Query Ensembl for genes from a specific species using multiple searchwords
-
-```python
-# Jupyter Lab / Google Colab:
-search(["gaba", "gamma-aminobutyric"], "homo_sapiens")
-
-# Terminal 
-$ gget search -sw gaba,gamma-aminobutyric -s homo_sapiens
-```
-&rarr; Returns all genes that contain at least one of the searchwords in their Ensembl or external reference description, in the format:
-
-| ensembl_id     | gene_name     | ensembl_description     | ext_ref_description        | biotype | url |
-| -------------- |-------------------------| ------------------------| -------------- | ----------|-----|
-| ENSG00000034713| GABARAPL2 | 	GABA type A receptor associated protein like 2 [Source:HGNC Symbol;Acc:HGNC:13291] | GABA type A receptor associated protein like 2 | protein_coding | https://uswest.ensembl.org/homo_sapiens/Gene/Summary?g=ENSG00000034713 |
-| . . .            | . . .                     | . . .                     | . . .            | . . .       | . . . |
-
-
-#### Query Ensembl for transcripts from a specific species which include ALL searchwords
-```python
-# Jupyter Lab / Google Colab:
-search(["gaba", "gamma-aminobutyric"], "nothobranchius_furzeri", d_type="transcript", andor="and")
-
-# Terminal 
-$ gget search -sw gaba,gamma-aminobutyric -s nothobranchius_furzeri -t transcript -ao and
-```
-&rarr; Returns all killifish transcripts that contain all of the searchwords in their Ensembl or external reference description.
-
-
-#### Query Ensembl for genes from a specific species using a single searchword and while limiting the number of returned search results 
-
-```python
-# Jupyter Lab / Google Colab:
-search("gaba", "homo_sapiens", limit=10)
-
-# Terminal 
-$ gget search -sw gaba -s homo_sapiens -l 10
-```
-&rarr; Returns the first 10 genes that contain the searchword in their Ensembl or external reference description. If more than one searchword is passed, `limit` will limit the number of genes per searchword. 
-
-#### Query Ensembl for genes from any of the 236 species databases found [here](http://ftp.ensembl.org/pub/release-105/mysql/), e.g. a specific mouse strain.   
-
-```python
-# Jupyter Lab / Google Colab:
-search("brain", "mus_musculus_cbaj_core_105_1")
-
-# Terminal 
-$ gget search -sw brain -s mus_musculus_cbaj_core_105_1 
-```
-&rarr; Returns genes from the CBA/J mouse strain that contain the searchword in their Ensembl or external reference description.
-
-___
-##gget info
-#### Look up a list of gene Ensembl IDs including information on all isoforms
-
-```python
-# Jupyter Lab / Google Colab:
-info(["ENSG00000034713", "ENSG00000104853", "ENSG00000170296"], expand=True)
-
-# Terminal 
-$ gget info -id ENSG00000034713,ENSG00000104853,ENSG00000170296 -e
-```
-&rarr; Returns information about each Ensembl ID in the format:  
-
-|      | uniprot_id     | ncbi_gene_id     | primary_gene_name | synonyms | protein_names | ensembl_description | uniprot_description | ncbi_description | biotype | canonical_transcript | ... |
-| -------------- |-------------------------| ------------------------| -------------- | ----------|-----|----|----|----|----|----|----|
-| ENSG00000034713| P60520 | 11345 | GABARAPL2 | [ATG8, ATG8C, FLC3A, GABARAPL2, GATE-16, GATE16, GEF-2, GEF2] | Gamma-aminobutyric acid receptor-associated protein like 2 (GABA(A) receptor-associated protein-like 2)... | GABA type A receptor associated protein like 2 [Source:HGNC Symbol;Acc:HGNC:13291] | FUNCTION: Ubiquitin-like modifier involved in intra- Golgi traffic (By similarity). Modulates intra-Golgi transport through coupling between NSF activity and ... | Enables ubiquitin protein ligase binding activity. Involved in negative regulation of proteasomal protein catabolic process and protein... | protein_coding | ENST00000037243.7 |... |
-| . . .            | . . .                     | . . .                     | . . .            | . . .       | . . . | . . . | . . . | . . . | . . . | . . . | ... |
-
-
-#### Look up a transcript Ensembl ID and include external reference descriptions
-
-```python
-# Jupyter Lab / Google Colab:
-info("ENSDART00000135343", xref=True)
-
-# Terminal 
-$ gget info -id ENSDART00000135343 -x
-```
-&rarr; Returns a json containing the homology information, and external reference description of each ID in addition to the standard information mentioned above.
-___
-
-##gget seq
-
-#### Fetch the sequences of several transcript Ensembl IDs
-```python
-# Jupyter Lab / Google Colab:
-seq(["ENST00000441207","ENST00000587537"])
-
-# Terminal 
-$ gget seq -id ENST00000441207,ENST00000587537
-```
-&rarr; Returns a FASTA containing the sequence of each ID, in the format:
-```
->Ensembl_ID chromosome:assembly:seq_region_name:seq_region_start:seq_region_end:strand
-GGGAATGGAAATCTGTCCCTCGTGCTGGAAGCCAACCAGTGGTGATGACTCTGTGTGCCACTCCGCCTCCTACAGCGCGGATCCTCTG  
-CGTGTGTCCTCGCAAGACAAGCTCGATGAAATGGCCGAGTCCAGTCAAGCAAACTTTGAGGGAA...
-```
-
-#### Fetch the sequences of a gene Ensembl ID and all its transcript isoforms
-```python
-# Jupyter Lab / Google Colab:
-seq("ENSMUSG00000025040", isoforms=True)
-
-# Terminal 
-$ gget seq -id ENSMUSG00000025040 -i
-```
-&rarr; Returns a FASTA containing the sequence of the gene ID and the sequences of all of each transcripts.
+![alt text](https://github.com/pachterlab/gget/blob/main/figures/gget_overview.png?raw=true)
