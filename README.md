@@ -122,9 +122,9 @@ $ gget search -sw gaba,gamma-aminobutyric -s homo_sapiens
 ```
 &rarr; Returns all genes that contain at least one of the searchwords in their Ensembl or external reference description, in the format:
 
-| Ensembl_ID     | Ensembl_description     | Ext_ref_description     | Biotype        | Gene_name | URL |
+| ensembl_id     | gene_name     | ensembl_description     | ext_ref_description        | biotype | url |
 | -------------- |-------------------------| ------------------------| -------------- | ----------|-----|
-| ENSG00000034713| GABA type A receptor associated protein like 2 [Source:HGNC Symbol;Acc:HGNC:13291] | 	GABA type A receptor associated protein like 2 | protein_coding | GABARAPL2 | https://uswest.ensembl.org/homo_sapiens/Gene/Summary?g=ENSG00000034713 |
+| ENSG00000034713| GABARAPL2 | 	GABA type A receptor associated protein like 2 [Source:HGNC Symbol;Acc:HGNC:13291] | GABA type A receptor associated protein like 2 | protein_coding | https://uswest.ensembl.org/homo_sapiens/Gene/Summary?g=ENSG00000034713 |
 | . . .            | . . .                     | . . .                     | . . .            | . . .       | . . . |
 
 
@@ -172,30 +172,13 @@ info(["ENSG00000034713", "ENSG00000104853", "ENSG00000170296"], expand=True)
 # Terminal 
 $ gget info -id ENSG00000034713,ENSG00000104853,ENSG00000170296 -e
 ```
-&rarr; Returns a json containing information about each ID, amongst others the common name, description, and corresponding transcript/gene, in the format:
-```
-{
-            "Ensembl ID": {
-                        "species": genus_species,
-                        "object_type": e.g. Gene,
-                        "biotype": Gene biotype, e.g. protein_coding,
-                        "display_name": Common gene name,
-                        "description": Ensemble description,
-                        "assembly_name": Name of species assmebly,
-                        "seq_region_name": Sequence region,
-                        "start": Sequence start position,
-                        "end": Sequence end position,
-                        "strand": Strand
-                        "canonical_transcript": Transcript ID,
-                        # All transcript isoforms:
-                        "Transcript": [{'display_name': Transcript name,
-					'biotype': Transcript biotype,
-					'id': Transcript ID}, ...]
-                        },
-}
-```
+&rarr; Returns information about each Ensembl ID in the format:  
 
-Note: When looking up Ensembl IDs of transcripts instead of genes, the "Transcript" entry above will be replaced by "Translation" and "Exon" information. 
+|      | uniprot_id     | ncbi_gene_id     | primary_gene_name | synonyms | protein_names | ensembl_description | uniprot_description | ncbi_description | biotype | canonical_transcript | ... |
+| -------------- |-------------------------| ------------------------| -------------- | ----------|-----|----|----|----|----|----|----|
+| ENSG00000034713| P60520 | 11345 | GABARAPL2 | [ATG8, ATG8C, FLC3A, GABARAPL2, GATE-16, GATE16, GEF-2, GEF2] | Gamma-aminobutyric acid receptor-associated protein like 2 (GABA(A) receptor-associated protein-like 2)... | GABA type A receptor associated protein like 2 [Source:HGNC Symbol;Acc:HGNC:13291] | FUNCTION: Ubiquitin-like modifier involved in intra- Golgi traffic (By similarity). Modulates intra-Golgi transport through coupling between NSF activity and ... | Enables ubiquitin protein ligase binding activity. Involved in negative regulation of proteasomal protein catabolic process and protein... | protein_coding | ENST00000037243.7 |... |
+| . . .            | . . .                     | . . .                     | . . .            | . . .       | . . . | . . . | . . . | . . . | . . . | . . . | ... |
+
 
 #### Look up a transcript Ensembl ID and include external reference descriptions
 
