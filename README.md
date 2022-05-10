@@ -7,7 +7,7 @@ This repository contains examples for [`gget`](https://github.com/pachterlab/gge
 
 `gget` is a free and open-source command-line tool and Python package that enables efficient querying of genomic databases. `gget`  consists of a collection of separate but interoperable modules, each designed to facilitate one type of database querying in a single line of code.  
   
-![gget_overview](https://user-images.githubusercontent.com/56094636/167542155-b3d229b5-0bb7-4c82-bc14-55748a4bdf7b.png)
+![alt text](https://github.com/pachterlab/gget/blob/main/figures/gget_overview.png?raw=true)
 
 `gget` currently consists of the following nine modules:
 - [`gget ref`](#gget-ref)  
