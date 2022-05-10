@@ -1,6 +1,6 @@
 # gget_examples
 
-This repository contains examples for [`gget`](https://github.com/pachterlab/gget).
+This repository contains examples for [`gget`](https://github.com/pachterlab/gget).  
 [Learn how to use gget from the terminal.](https://github.com/pachterlab/gget_examples/blob/main/gget_workflow_terminal.ipynb)  
 [Learn how to use gget in JupyterLab.](https://github.com/pachterlab/gget_examples/blob/main/gget_workflow_JupyterLab.ipynb)  
 [Learn how gget can help you with your scRNA-seq analysis.](https://github.com/pachterlab/gget_examples/tree/main/scRNAseq_workflow)  
