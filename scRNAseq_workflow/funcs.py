@@ -380,7 +380,10 @@ def chr_locations(df_blat):
     ax.set_ylabel("Differentially Expressed Gene Counts", fontsize=fontsize)
     # Change fontsize of tick labels
     ax.tick_params(axis="both", labelsize=fontsize-1)
-    
+
+    # Rotate x-tick labels by 45 degrees
+    ax.set_xticklabels(x, rotation=45, ha="right")
+
     # Set y axis to keep only integers since counts cannot be floats
     ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
