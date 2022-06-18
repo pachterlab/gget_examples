@@ -146,7 +146,7 @@ def library_sat_gene_fraction(adata, genes, expected_num_cells, gene_type="QC"):
 #     print(f"Maximum total UMI count for all apoptosis/stress genes in one cell: {total_exp.max()}.")
 
     # Calculate the fraction of the total sum per cell
-    total_mito_fraction = total_exp / np.sum(total_exp)
+    total_mito_fraction = total_exp / adata.X.sum(axis=1).A1
 
     x = nd(adata.X.sum(1))
     y = nd((adata.X>0).sum(1))
