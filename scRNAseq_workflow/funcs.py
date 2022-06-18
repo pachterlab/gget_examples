@@ -154,8 +154,6 @@ def library_sat_gene_fraction(adata, genes, expected_num_cells, gene_type="QC"):
     idx = c.argsort()
     x2, y2, c2 = x[idx], y[idx], c[idx]
     scatter = ax.scatter(x2, y2, c=c2, cmap="Reds")
-    # Set range of colorbar
-    scatter.set_clim(0, 0.001) 
     
     # Add line to show filtering cut off
     knee = np.sort((np.array(adata.X.sum(axis=1))).flatten())[::-1]
